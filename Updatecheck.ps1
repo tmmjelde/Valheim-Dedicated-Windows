@@ -2,6 +2,7 @@ $Config = Get-Content "C:\SteamCMD\Updatecheck.config" | convertfrom-json
 <#Contents example of the config file
 {
     "servername":  "lazyservername",
+    "world": "Dedicated"
     "port": "2456",
     "password": "notsosecret",
     "gameid":  "896660",
@@ -16,7 +17,7 @@ Function Start-Valheim {
         write-host "Valheim already running"
     }else {
         $env:SteamAppId="892970"
-        Start-Process "$($config.forceinstalldir)\valheim_server.exe" -ArgumentList "-nographics -batchmode -name $($config.servername) -port $($config.port) -world 'Dedicated' -password $($config.password)"
+        Start-Process "$($config.forceinstalldir)\valheim_server.exe" -ArgumentList "-nographics -batchmode -name `"$($config.servername)`" -port $($config.port) -world $($config.world) -password $($config.password)"
     }
 }
 Function Update-Valheim {
