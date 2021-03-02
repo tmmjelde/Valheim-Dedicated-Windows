@@ -13,6 +13,12 @@
 
 #Contents example of the config file:
 
+Note that this is a JSON Formatted configuration file.
+Any directory paths need to have double \\ instead of single \.
+Every line must be separated by a ,
+Except the last line.
+The file must start with { and end with }
+
 {
     "servername":  "lazyservername",
     "port": "2456",
