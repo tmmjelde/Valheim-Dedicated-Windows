@@ -53,7 +53,7 @@ Function Get-ValheimCurrentVersion {
 }
 Function Get-ValheimLatestVersion {
     Write-Host "Checking for latest version online..."
-    $Data = Invoke-WebRequest -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
+    $Data = Invoke-WebRequest -UseBasicParsing -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
     $json = $data.content | convertfrom-json
     $BuildID = $json.data.$($config.gameid).depots.branches.public.buildid
     Return $BuildID
