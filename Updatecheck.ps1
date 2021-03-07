@@ -21,7 +21,7 @@ Function Start-Valheim {
         write-host "Valheim already running"
     }else {
         $env:SteamAppId="892970"
-        Start-Process "$($config.forceinstalldir)\valheim_server.exe" -ArgumentList "-nographics -batchmode -name `"$($config.servername)`" -port $($config.port) -world $($config.world) -password $($config.password)"
+        Start-Process "$($config.forceinstalldir)\valheim_server.exe" -ArgumentList "-nographics -batchmode -name `"$($config.servername)`" -port $($config.port) -world `"$($config.world)`" -password `"$($config.password)`""
     }
 }
 Function Update-Valheim {
@@ -31,7 +31,7 @@ Function Update-Valheim {
         write-host "Stop the game server first: Stop-Valheim"
     }else {
         Write-Host "Updating $($config.servername)"
-        Start-Process "$($config.steamcmd)" -ArgumentList "+login anonymous +force_install_dir $($config.forceinstalldir) +app_update $($config.gameid) validate +exit" -wait
+        Start-Process "$($config.steamcmd)" -ArgumentList "+login anonymous +force_install_dir `"$($config.forceinstalldir)`" +app_update $($config.gameid) validate +exit" -wait
     }
 }
 Function Stop-Valheim {
@@ -53,7 +53,7 @@ Function Get-ValheimCurrentVersion {
 }
 Function Get-ValheimLatestVersion {
     Write-Host "Checking for latest version online..."
-    $Data = Invoke-WebRequest -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
+    $Data = Invoke-WebRequest -UseBasicParsing -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
     $json = $data.content | convertfrom-json
     $BuildID = $json.data.$($config.gameid).depots.branches.public.buildid
     Return $BuildID
@@ -109,7 +109,7 @@ do{
     } else {
         Write-host "Newest buildid is current: $($BuildID)"
     }
-    if ($Config.BackupsEnabled) {
+    if ($Config.BackupsEnabled -eq "True") {
         Start-ValheimBackupRegular
         Start-ValheimBackupCleanup
     }
