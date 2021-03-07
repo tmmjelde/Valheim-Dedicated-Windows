@@ -53,11 +53,18 @@ Function Get-ValheimCurrentVersion {
 }
 Function Get-ValheimLatestVersion {
     Write-Host "Checking for latest version online..."
-    $Data = Invoke-WebRequest -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
-    $json = $data.content | convertfrom-json
-    $BuildID = $json.data.$($config.gameid).depots.branches.public.buildid
+    try {
+        $Data = Invoke-WebRequest -Uri "https://api.steamcmd.net/v1/info/$($config.gameid)"
+        $json = $data.content | convertfrom-json
+        $BuildID = $json.data.$($config.gameid).depots.branches.public.buildid
+    }
+        catch {
+        write-host "Unable to reach steam servers. Error: $error"
+        $BuildID = "NotAvailable"
+    }
     Return $BuildID
 }
+
 
 
 Function Start-ValheimBackupRegular {
@@ -101,7 +108,7 @@ do{
     $BuildID = Get-ValheimLatestVersion
     $CurrentBuildID = Get-ValheimCurrentVersion
     
-    if ($BuildID -ne $CurrentBuildID){
+    if ( ($BuildID -ne $CurrentBuildID) -and ($BuildID -ne "NotAvailable") ) {
         #New version detected. Initiating patching
         write-host "New version found. Stopping and updating Valheim_server"
         Stop-Valheim
