@@ -66,7 +66,6 @@ Function Get-ValheimLatestVersion {
 }
 
 
-
 Function Start-ValheimBackupRegular {
     #This will back up Valheim world
     #Should implement support for -saves parameter in config file and link the backup there if specified.
